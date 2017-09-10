@@ -1,0 +1,10 @@
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Sorting\Sorting\bin\Debug\netcoreapp1.1\Sorting.deps.json
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Sorting\Sorting\bin\Debug\netcoreapp1.1\Sorting.runtimeconfig.json
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Sorting\Sorting\bin\Debug\netcoreapp1.1\Sorting.runtimeconfig.dev.json
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Sorting\Sorting\bin\Debug\netcoreapp1.1\Sorting.dll
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Sorting\Sorting\bin\Debug\netcoreapp1.1\Sorting.pdb
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Sorting\Sorting\obj\Debug\netcoreapp1.1\Sorting.csprojResolveAssemblyReference.cache
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Sorting\Sorting\obj\Debug\netcoreapp1.1\Sorting.csproj.CoreCompileInputs.cache
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Sorting\Sorting\obj\Debug\netcoreapp1.1\Sorting.AssemblyInfo.cs
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Sorting\Sorting\obj\Debug\netcoreapp1.1\Sorting.dll
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Sorting\Sorting\obj\Debug\netcoreapp1.1\Sorting.pdb

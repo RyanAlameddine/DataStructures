@@ -4,3 +4,10 @@ c:\users\ryanalameddine\documents\visual studio 2015\Projects\ListProjects\ListP
 c:\users\ryanalameddine\documents\visual studio 2015\Projects\ListProjects\ListProjects\obj\Debug\ListProjects.csprojResolveAssemblyReference.cache
 c:\users\ryanalameddine\documents\visual studio 2015\Projects\ListProjects\ListProjects\obj\Debug\ListProjects.exe
 c:\users\ryanalameddine\documents\visual studio 2015\Projects\ListProjects\ListProjects\obj\Debug\ListProjects.pdb
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\ListProjects\ListProjects\bin\Debug\ListProjects.exe.config
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\ListProjects\ListProjects\obj\Debug\ListProjects.exe
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\ListProjects\ListProjects\obj\Debug\ListProjects.pdb
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\ListProjects\ListProjects\bin\Debug\ListProjects.exe
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\ListProjects\ListProjects\bin\Debug\ListProjects.pdb
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\ListProjects\ListProjects\obj\Debug\ListProjects.csprojResolveAssemblyReference.cache
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\ListProjects\ListProjects\obj\Debug\ListProjects.csproj.CoreCompileInputs.cache
