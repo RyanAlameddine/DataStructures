@@ -1,0 +1,14 @@
+C:\Users\RyanAlameddine\source\repos\Trees\Trees\bin\Debug\Trees.exe.config
+C:\Users\RyanAlameddine\source\repos\Trees\Trees\bin\Debug\Trees.exe
+C:\Users\RyanAlameddine\source\repos\Trees\Trees\bin\Debug\Trees.pdb
+C:\Users\RyanAlameddine\source\repos\Trees\Trees\obj\Debug\Trees.csprojResolveAssemblyReference.cache
+C:\Users\RyanAlameddine\source\repos\Trees\Trees\obj\Debug\Trees.csproj.CoreCompileInputs.cache
+C:\Users\RyanAlameddine\source\repos\Trees\Trees\obj\Debug\Trees.exe
+C:\Users\RyanAlameddine\source\repos\Trees\Trees\obj\Debug\Trees.pdb
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Trees\Trees\bin\Debug\Trees.exe.config
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Trees\Trees\bin\Debug\Trees.exe
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Trees\Trees\bin\Debug\Trees.pdb
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Trees\Trees\obj\Debug\Trees.csprojResolveAssemblyReference.cache
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Trees\Trees\obj\Debug\Trees.csproj.CoreCompileInputs.cache
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Trees\Trees\obj\Debug\Trees.exe
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Trees\Trees\obj\Debug\Trees.pdb

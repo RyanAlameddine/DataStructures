@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sorting
 {
-    public class Bubble
+    public unsafe class Bubble
     {
         public static void Sort(int[] numbers)
         {

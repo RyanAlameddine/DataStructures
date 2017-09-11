@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 namespace Sorting
 {
-    public class Selection
+    public unsafe class Selection
     {
         public static void Sort(int[] numbers)
         {

@@ -2,7 +2,7 @@
 
 namespace Sorting
 {
-    class Program
+    unsafe class Program
     {
         static void Main(string[] args)
         {

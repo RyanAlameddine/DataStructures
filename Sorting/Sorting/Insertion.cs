@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sorting
 {
-    public class Insertion
+    public unsafe class Insertion
     {
         public static void Sort(int[] numbers)
         {
@@ -14,13 +14,15 @@ namespace Sorting
                 bool isSmallest = true;
                 for(int j = i - 1; j >= 0; j--)
                 {
-                    if (numbers[j] < value)
+                    if (value < numbers[0])
                     {
-                        isSmallest = false;
-                        if (j != i - 1)
-                        {
-                            shift(numbers, i - 1, j + 1);
-                        }
+                        break;
+                    }
+                    isSmallest = false;
+                    if (value > numbers[j])
+                    {
+                        shift(numbers, i, j+1);
+                        break;
                     }
                 }
 
