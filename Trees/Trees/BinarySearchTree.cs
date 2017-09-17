@@ -80,6 +80,10 @@ namespace Trees
             string description = "{";
             Stack<TNode> nodes = new Stack<TNode>();
             nodes.Push(root);
+            description += nodes.Peek().key + ", ";
+
+            List<int> usedIds = new List<int>();
+            usedIds.Add(nodes.Peek().id);
 
             bool finished = false;
             bool finishedLeft = false;
@@ -95,6 +99,11 @@ namespace Trees
                     else
                     {
                         nodes.Push(nodes.Peek().left);
+                        if (!usedIds.Contains(nodes.Peek().id))
+                        {
+                            usedIds.Add(nodes.Peek().id);
+                            description += nodes.Peek().key + ", ";
+                        }
                     }
                 }
                 else
@@ -130,17 +139,121 @@ namespace Trees
                     }
                     finishedLeft = false;
                     nodes.Push(nodes.Peek().right);
-
+                    if (!usedIds.Contains(nodes.Peek().id))
+                    {
+                        usedIds.Add(nodes.Peek().id);
+                        description += nodes.Peek().key + ", ";
+                    }
                 }
             }
 
             return description;
         }
 
-        //public void PostOrderTraverse()
-        //{
+        public string PostOrderTraverse()
+        {
+            string description = "{";
+            Stack<TNode> nodes = new Stack<TNode>();
+            nodes.Push(root);
 
-        //}
+            List<int> usedIds = new List<int>();
+
+            bool finished = false;
+            bool finishedLeft = false;
+
+            while (!finished)
+            {
+                if (!finishedLeft)
+                {
+                    if (nodes.Peek().left == null)
+                    {
+                        finishedLeft = true;
+                    }
+                    else
+                    {
+                        nodes.Push(nodes.Peek().left);
+                    }
+                }
+                else
+                {
+                    TNode previous = null;
+                    if (nodes.Peek().key == 6)
+                    {
+                        int xxxxxx = 0;
+                    }
+                    while (nodes.Peek().right == null || nodes.Peek().right == previous)
+                    {
+                        previous = nodes.Peek();
+                        if (!usedIds.Contains(nodes.Peek().id))
+                        {
+                            usedIds.Add(nodes.Peek().id);
+                            description += nodes.Pop().key + ", ";
+                        }
+                        else
+                        {
+                            nodes.Pop();
+                        }
+                        if (nodes.Peek().parent == root && nodes.Peek().parent.right == nodes.Peek())
+                        {
+                            finished = true;
+                            description += nodes.Peek().key + ", ";
+                            description += root.key + ", ";
+                            description = description.Remove(description.Count() - 2, 2);
+                            description += "}";
+
+                            break;
+                        }
+                    }
+                    finishedLeft = false;
+                    nodes.Push(nodes.Peek().right);
+                }
+            }
+
+            return description;
+        }
+
+        public string LevelOrderTraverse()
+        {
+            string description = "{";
+            bool finished = false;
+
+            List<TNode> previousNodes = new List<TNode>();
+            List<TNode> currentNodes = new List<TNode>();
+
+            description += root.key + ", ";
+            previousNodes.Add(root);
+
+            while (!finished)
+            {
+                bool anyExist = false;
+                foreach(TNode node in previousNodes)
+                {
+                    if (node.left != null)
+                    {
+                        anyExist = true;
+                        description += node.left.key + ", ";
+                        currentNodes.Add(node.left);
+                    }
+                    if (node.right != null)
+                    {
+                        anyExist = true;
+                        description += node.right.key + ", ";
+                        currentNodes.Add(node.right);
+                    }
+                }
+                previousNodes = currentNodes;
+                currentNodes = new List<TNode>();
+
+                if (!anyExist)
+                {
+                    finished = true;
+                }
+            }
+
+            description = description.Remove(description.Count() - 2, 2);
+            description += "}";
+            return description;
+        }
 
         public TNode Search(int key)
         {
@@ -157,10 +270,23 @@ namespace Trees
             return right != null ? right : left != null ? left : null;
         }
 
-        //public TNode IterativeFind(int position)
-        //{
+        public TNode IterativeFind(int key)
+        {
+            TNode current = root;
 
-        //}
+            while(current != null && current.key != key)
+            {
+                if(current.key < key)
+                {
+                    current = current.right;
+                }
+                else
+                {
+                    current = current.left;
+                }
+            }
+            return current;
+        }
 
         public TNode Minimum()
         {
