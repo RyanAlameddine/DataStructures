@@ -349,10 +349,61 @@ namespace Trees
             }
         }
 
-        //public void Delete(TNode node)
-        //{
+        public void Delete(TNode node)
+        {
+            if (node.isLeaf())
+            {
+                if (node.parent.left == node)
+                {
+                    node.parent.left = null;
+                }
+                else
+                {
+                    node.parent.right = null;
+                }
+            }
+            else if (node.right != null && node.left == null)
+            {
+                if (node.parent.left == node)
+                {
+                    node.parent.left = node.right;
+                    node.left.parent = node.parent;
+                }
+                else
+                {
+                    node.parent.right = node.right;
+                    node.right.parent = node.parent;
+                }
+            }
+            else if (node.left != null && node.right == null)
+            {
+                if (node.parent.left == node)
+                {
+                    node.parent.left = node.left;
+                    node.left.parent = node.parent;
+                }
+                else
+                {
+                    node.parent.right = node.left;
+                    node.right.parent = node.parent;
+                }
+            }
+            else
+            {
+                TNode greatest = node.left;
+                while(greatest.right != null)
+                {
+                    greatest = greatest.right;
+                }
 
-        //}
+                node.key = greatest.key;
+
+                greatest.left.parent = node;
+                node.left = greatest.left;
+
+                node.right.parent = node;
+            }
+        }
 
         public bool IsEmpty()
         {
@@ -376,6 +427,11 @@ namespace Trees
         public bool isLeaf()
         {
             return left == null && right == null;
+        }
+
+        public override string ToString()
+        {
+            return "TNode: " + key;
         }
     }
 }

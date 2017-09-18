@@ -42,6 +42,12 @@ namespace Trees
             Console.WriteLine(tree.PreOrderTraverse());
             Console.WriteLine(tree.PostOrderTraverse());
             Console.WriteLine(tree.LevelOrderTraverse());
+
+            Console.WriteLine("");
+
+            tree.Delete(tree.Search(3));
+            Console.WriteLine(tree.LevelOrderTraverse());
+
             Console.ReadKey();
         }
     }

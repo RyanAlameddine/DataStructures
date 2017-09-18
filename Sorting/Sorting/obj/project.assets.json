@@ -7045,11 +7045,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\RyanAlameddine\\Documents\\GitHub\\DataStructures\\Sorting\\Sorting\\Sorting.csproj",
+      "projectUniqueName": "C:\\Users\\RyanAlameddine\\Documents\\DataStructures\\Sorting\\Sorting\\Sorting.csproj",
       "projectName": "Sorting",
-      "projectPath": "C:\\Users\\RyanAlameddine\\Documents\\GitHub\\DataStructures\\Sorting\\Sorting\\Sorting.csproj",
+      "projectPath": "C:\\Users\\RyanAlameddine\\Documents\\DataStructures\\Sorting\\Sorting\\Sorting.csproj",
       "packagesPath": "C:\\Users\\RyanAlameddine\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\RyanAlameddine\\Documents\\GitHub\\DataStructures\\Sorting\\Sorting\\obj\\",
+      "outputPath": "C:\\Users\\RyanAlameddine\\Documents\\DataStructures\\Sorting\\Sorting\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\RyanAlameddine\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -7060,12 +7060,18 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp1.1": {
           "projectReferences": {}
         }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
       }
     },
     "frameworks": {
