@@ -7,7 +7,7 @@ namespace Sorting
         static void Main(string[] args)
         {
             Random rand = new Random();
-            int[] numbers = new int[] { 54, 26, 93, 17, 77, 31, 44, 55, 20, 65 };
+            int[] numbers = new int[] { 6, 8, 4, 5, 7 };
             for (int i = 0; i < numbers.Length; i++)
             {
                 //numbers[i] = rand.Next(-20, 20);
@@ -21,7 +21,7 @@ namespace Sorting
             Console.WriteLine();
             Console.WriteLine();
 
-            Merge.MergeSort(numbers);
+            Quick.Sort(numbers);
 
             for (int i = 0; i < numbers.Length; i++)
             {
