@@ -8,37 +8,38 @@ namespace Sorting
     {
         public static void Sort(int[] numbers)
         {
-            partition(numbers, 0, numbers.Length - 1);
+            quickSort(numbers, 0, numbers.Length - 1);
         }
 
-        static void partition(int[] numbers, int start, int end)
+        static void quickSort(int[] numbers, int low, int high)
         {
-            if (end - start <= 0) return;
-            int Ist = start;
-            int IInd = end - 1;
-            int pivot = numbers[end];
-            while(numbers[Ist] > numbers[IInd])
+            if(low < high)
             {
-                if(numbers[Ist] > pivot)
-                {
-                    while(numbers[IInd] > pivot)
-                    {
-                        IInd++;
-                        if(Ist < IInd)
-                        {
-                            swap(numbers, end, IInd);
-                            partition(numbers, start, IInd - 1);
-                            partition(numbers, IInd + 1, end);
-                            return;
-                        }
-                    }
-                    swap(numbers, Ist, IInd);
-                }
-                Ist++;
+                int p = partition(numbers, low, high);
+                quickSort(numbers, low, p);
+                quickSort(numbers, p + 1, high);
             }
-            swap(numbers, Ist, end);
-            partition(numbers, start, Ist - 1);
-            partition(numbers, Ist + 1, end);
+        }
+
+        static int partition(int[] numbers, int low, int high)
+        {
+            int pivot = numbers[low];
+            int i = low - 1;
+            int j = high + 1;
+            while (true)
+            {
+                do
+                {
+                    i += 1;
+                } while (numbers[i] < pivot);
+                do
+                {
+                    j -= 1;
+                } while (numbers[j] > pivot);
+
+                if (i >= j) return j;
+                swap(numbers, i, j);
+            }
         }
 
         static void swap(int[] numbers, int first, int second)
