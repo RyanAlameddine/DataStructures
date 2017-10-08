@@ -89,6 +89,10 @@ namespace Trees
             {
                 x = 1;
             }
+            else
+            {
+                return 0;
+            }
             while (current.Next != null)
             {
                 x++;

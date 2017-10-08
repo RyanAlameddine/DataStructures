@@ -11,30 +11,18 @@ namespace Trees
     {
         static void Main(string[] args)
         {
-            BinarySearchTree tree = new BinarySearchTree();
-            tree.Insert(new TNode(5));
-            tree.Insert(new TNode(6));
-            tree.Insert(new TNode(3));
-            tree.Insert(new TNode(2));
-            tree.Insert(new TNode(7));
-            tree.Insert(new TNode(8));
-            tree.Insert(new TNode(9));
-            tree.Insert(new TNode(0));
-            tree.Insert(new TNode(1));
-            tree.Insert(new TNode(4));
-
-            TNode node = tree.Search(5);
-            Console.WriteLine(node.id);
+            AVL tree = new AVL();
+            tree.Insert(new AVLNode(5));
+            tree.Insert(new AVLNode(7));
+            tree.Insert(new AVLNode(9));
+            tree.Insert(new AVLNode(8));
+            tree.Insert(new AVLNode(10));
+            tree.Insert(new AVLNode(11));
 
             Console.WriteLine("");
 
             Console.WriteLine(tree.Minimum().key);
             Console.WriteLine(tree.Maximum().key);
-
-            Console.WriteLine("");
-
-            Console.WriteLine(tree.IterativeFind(8).key);
-
 
             Console.WriteLine("");
 
@@ -44,9 +32,6 @@ namespace Trees
             Console.WriteLine(tree.LevelOrderTraverse());
 
             Console.WriteLine("");
-
-            tree.Delete(tree.Search(3));
-            Console.WriteLine(tree.LevelOrderTraverse());
 
             Console.ReadKey();
         }

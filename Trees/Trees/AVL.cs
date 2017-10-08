@@ -40,6 +40,13 @@ namespace Trees
                     AVLNode previous = null;
                     while (nodes.Peek().right == null || nodes.Peek().right == previous)
                     {
+                        if (nodes.Peek().parent == root && nodes.Peek().parent.right == nodes.Peek())
+                        {
+                            finished = true;
+                            description = description.Remove(description.Count() - 2, 2);
+                            description += "}";
+                            break;
+                        }
                         previous = nodes.Peek();
                         if (!usedIds.Contains(nodes.Peek().id))
                         {
@@ -50,13 +57,14 @@ namespace Trees
                         {
                             nodes.Pop();
                         }
-                        if (nodes.Peek().parent == root && nodes.Peek().parent.right == nodes.Peek())
+                        if(nodes.Count() == 0)
                         {
                             finished = true;
                             description = description.Remove(description.Count() - 2, 2);
                             description += "}";
-                            break;
+                            return description;
                         }
+                        
                     }
                     if (!finished)
                     {
@@ -121,6 +129,13 @@ namespace Trees
                         {
                             nodes.Pop();
                         }
+                        if (nodes.Count() == 0)
+                        {
+                            finished = true;
+                            description = description.Remove(description.Count() - 2, 2);
+                            description += "}";
+                            return description;
+                        }
                         if (nodes.Peek().parent == root && nodes.Peek().parent.right == nodes.Peek())
                         {
                             finished = true;
@@ -142,7 +157,15 @@ namespace Trees
                     if (!usedIds.Contains(nodes.Peek().id))
                     {
                         usedIds.Add(nodes.Peek().id);
-                        description += nodes.Peek().key + ", ";
+                        if (finished)
+                        {
+                            description = description.Remove(description.Count() - 1, 1);
+                            description += ", " + nodes.Peek().key + "}";
+                        }
+                        else
+                        {
+                            description += nodes.Peek().key + ", ";
+                        }
                     }
                 }
             }
@@ -177,22 +200,8 @@ namespace Trees
                 else
                 {
                     AVLNode previous = null;
-                    if (nodes.Peek().key == 6)
-                    {
-                        int xxxxxx = 0;
-                    }
                     while (nodes.Peek().right == null || nodes.Peek().right == previous)
                     {
-                        previous = nodes.Peek();
-                        if (!usedIds.Contains(nodes.Peek().id))
-                        {
-                            usedIds.Add(nodes.Peek().id);
-                            description += nodes.Pop().key + ", ";
-                        }
-                        else
-                        {
-                            nodes.Pop();
-                        }
                         if (nodes.Peek().parent == root && nodes.Peek().parent.right == nodes.Peek())
                         {
                             finished = true;
@@ -203,6 +212,23 @@ namespace Trees
 
                             break;
                         }
+                        previous = nodes.Peek();
+                        if (!usedIds.Contains(nodes.Peek().id))
+                        {
+                            usedIds.Add(nodes.Peek().id);
+                            description += nodes.Pop().key + ", ";
+                        }
+                        else
+                        {
+                            nodes.Pop();
+                        }
+                        if (nodes.Count() == 0)
+                        {
+                            finished = true;
+                            description = description.Remove(description.Count() - 2, 2);
+                            description += "}";
+                            return description;
+                        }
                     }
                     finishedLeft = false;
                     nodes.Push(nodes.Peek().right);
@@ -210,6 +236,70 @@ namespace Trees
             }
 
             return description;
+        }
+
+        //REPLACE DESCRIPTIONS WITH HEIGHT
+        void PostOrderHeightCalculation()
+        {
+            string description = "{";
+            Stack<AVLNode> nodes = new Stack<AVLNode>();
+            nodes.Push(root);
+
+            List<int> usedIds = new List<int>();
+
+            bool finished = false;
+            bool finishedLeft = false;
+
+            while (!finished)
+            {
+                if (!finishedLeft)
+                {
+                    if (nodes.Peek().left == null)
+                    {
+                        finishedLeft = true;
+                    }
+                    else
+                    {
+                        nodes.Push(nodes.Peek().left);
+                    }
+                }
+                else
+                {
+                    AVLNode previous = null;
+                    while (nodes.Peek().right == null || nodes.Peek().right == previous)
+                    {
+                        if (nodes.Peek().parent == root && nodes.Peek().parent.right == nodes.Peek())
+                        {
+                            finished = true;
+                            description += nodes.Peek().key + ", ";
+                            description += root.key + ", ";
+                            description = description.Remove(description.Count() - 2, 2);
+                            description += "}";
+
+                            break;
+                        }
+                        previous = nodes.Peek();
+                        if (!usedIds.Contains(nodes.Peek().id))
+                        {
+                            usedIds.Add(nodes.Peek().id);
+                            description += nodes.Pop().key + ", ";
+                        }
+                        else
+                        {
+                            nodes.Pop();
+                        }
+                        if (nodes.Count() == 0)
+                        {
+                            finished = true;
+                            description = description.Remove(description.Count() - 2, 2);
+                            description += "}";
+                            return;
+                        }
+                    }
+                    finishedLeft = false;
+                    nodes.Push(nodes.Peek().right);
+                }
+            }
         }
 
         public string LevelOrderTraverse()
@@ -326,6 +416,7 @@ namespace Trees
                             current.left = newNode;
                             newNode.parent = current;
                             newNode.CalculateHeight();
+                            Rebalance(newNode);
                             break;
                         }
                     }
@@ -340,6 +431,7 @@ namespace Trees
                             current.right = newNode;
                             newNode.parent = current;
                             newNode.CalculateHeight();
+                            Rebalance(newNode);
                             break;
                         }
                     }
@@ -365,17 +457,150 @@ namespace Trees
                  */
                 if (current.Balance() > 1)
                 {
+                    if (current.right.Balance() >= 0)
+                    {
+                        AVLNode right = current.right;
+                        current.right = current.right.left;
+                        current.right.left = null;
+                        right.parent = current.parent;
+                        right.left = current;
+                        current.parent = right;
+                    }
+                    else
+                    {
+                        //Double rotate Left-Right
+
+                        //Right rotation on subNode
+                        AVLNode subCurrent = current.right;
+                        AVLNode left = subCurrent.left;
+                        subCurrent.left = subCurrent.left.right;
+                        subCurrent.left.right = null;
+                        left.parent = subCurrent.parent;
+                        left.right = subCurrent;
+                        subCurrent.parent = left;
+
+                        //Left rotation on current Node
+                        AVLNode right = current.right;
+                        current.right = current.right.left;
+                        current.right.left = null;
+                        right.parent = current.parent;
+                        right.left = current;
+                        current.parent = right;
+                    }
+                }else if(current.Balance() < -1)
+                {
+                    if (current.right.Balance() >= 0)
+                    {
+                        AVLNode left = current.left;
+                        current.left = current.left.right;
+                        current.left.right = null;
+                        left.parent = current.parent;
+                        left.right = current;
+                        current.parent = left;
+                    }
+                    else
+                    {
+                        //Double rotate Right-Left
+
+                        //Left rotation on subNode
+                        AVLNode subCurrent = current.left;
+                        AVLNode right = subCurrent.right;
+                        subCurrent.right = subCurrent.right.left;
+                        subCurrent.right.left = null;
+                        right.parent = subCurrent.parent;
+                        right.right = subCurrent;
+                        subCurrent.parent = right;
+
+                        //Right rotation on current Node
+                        AVLNode left = current.left;
+                        current.left = current.left.right;
+                        current.left.right = null;
+                        left.parent = current.parent;
+                        left.left = current;
+                        current.parent = left;
+                    }
+                }
+
+                current = current.parent;
+            }
+            current.CalculateHeight();
+            /*
+             rotate left:
+             og right child becomes parent
+             og right child, left child becomes your right child
+             */
+            if (current.Balance() > 1)
+            {
+                if (current.right.Balance() >= 0)
+                {
+                    AVLNode right = current.right;
+                    current.right = current.right.left;
+                    if (current.right != null)
+                    {
+                        current.right.left = null;
+                    }
+                    right.parent = current.parent;
+                    right.left = current;
+                    current.parent = right;
+                }
+                else
+                {
+                    //Double rotate Left-Right
+
+                    //Right rotation on subNode
+                    AVLNode subCurrent = current.right;
+                    AVLNode left = subCurrent.left;
+                    subCurrent.left = subCurrent.left.right;
+                    subCurrent.left.right = null;
+                    left.parent = subCurrent.parent;
+                    left.right = subCurrent;
+                    subCurrent.parent = left;
+
+                    //Left rotation on current Node
                     AVLNode right = current.right;
                     current.right = current.right.left;
                     current.right.left = null;
                     right.parent = current.parent;
-
-                }else if(current.Balance() < -1)
-                {
-
+                    right.left = current;
+                    current.parent = right;
                 }
+            }
+            else if (current.Balance() < -1)
+            {
+                if (current.right.Balance() >= 0)
+                {
+                    AVLNode left = current.left;
+                    current.left = current.left.right;
+                    current.left.right = null;
+                    left.parent = current.parent;
+                    left.right = current;
+                    current.parent = left;
+                }
+                else
+                {
+                    //Double rotate Right-Left
 
-                current = current.parent;
+                    //Left rotation on subNode
+                    AVLNode subCurrent = current.left;
+                    AVLNode right = subCurrent.right;
+                    subCurrent.right = subCurrent.right.left;
+                    subCurrent.right.left = null;
+                    right.parent = subCurrent.parent;
+                    right.right = subCurrent;
+                    subCurrent.parent = right;
+
+                    //Right rotation on current Node
+                    AVLNode left = current.left;
+                    current.left = current.left.right;
+                    current.left.right = null;
+                    left.parent = current.parent;
+                    left.left = current;
+                    current.parent = left;
+                }
+            }
+            while(root.parent != null)
+            {
+                root = root.parent;
             }
         }
     }
@@ -402,7 +627,7 @@ namespace Trees
 
         public override string ToString()
         {
-            return "TNode: " + key;
+            return "AVLNode: " + key;
         }
 
         public void CalculateHeight()
@@ -410,13 +635,24 @@ namespace Trees
             if (isLeaf()) height = 1;
             else
             {
-                height = right.height > left.height ? right.height + 1 : left.height + 1;
+                if(right == null)
+                {
+                    height = left.height + 1;
+                }
+                else if(left == null)
+                {
+                    height = right.height + 1;
+                }
+                else
+                {
+                    height = right.height > left.height ? right.height + 1 : left.height + 1;
+                }
             }
         }
 
         public int Balance()
         {
-            return left.height - right.height;
+            return (right == null ? 0 : right.height) - (left == null ? 0 : left.height);
         }
     }
 }
