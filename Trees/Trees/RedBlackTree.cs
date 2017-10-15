@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Trees
 {
-    public class AVL
+    public class RedBlackTree
     {
         public static int highestId = 0;
-        AVLNode root = null;
+        RBNode root = null;
 
         public string InOrderTraverse()
         {
             string description = "{";
-            Stack<AVLNode> nodes = new Stack<AVLNode>();
+            Stack<RBNode> nodes = new Stack<RBNode>();
             nodes.Push(root);
 
             List<int> usedIds = new List<int>();
@@ -37,7 +37,7 @@ namespace Trees
                 }
                 else
                 {
-                    AVLNode previous = null;
+                    RBNode previous = null;
                     while (nodes.Peek().right == null || nodes.Peek().right == previous)
                     {
                         if (nodes.Peek().parent == root && nodes.Peek().parent.right == nodes.Peek())
@@ -86,7 +86,7 @@ namespace Trees
         public string PreOrderTraverse()
         {
             string description = "{";
-            Stack<AVLNode> nodes = new Stack<AVLNode>();
+            Stack<RBNode> nodes = new Stack<RBNode>();
             nodes.Push(root);
             description += nodes.Peek().key + ", ";
 
@@ -116,7 +116,7 @@ namespace Trees
                 }
                 else
                 {
-                    AVLNode previous = null;
+                    RBNode previous = null;
                     while (nodes.Peek().right == null || nodes.Peek().right == previous)
                     {
                         previous = nodes.Peek();
@@ -176,7 +176,7 @@ namespace Trees
         public string PostOrderTraverse()
         {
             string description = "{";
-            Stack<AVLNode> nodes = new Stack<AVLNode>();
+            Stack<RBNode> nodes = new Stack<RBNode>();
             nodes.Push(root);
 
             List<int> usedIds = new List<int>();
@@ -199,7 +199,7 @@ namespace Trees
                 }
                 else
                 {
-                    AVLNode previous = null;
+                    RBNode previous = null;
                     while (nodes.Peek().right == null || nodes.Peek().right == previous)
                     {
                         if (nodes.Peek().parent == root && nodes.Peek().parent.right == nodes.Peek())
@@ -238,70 +238,13 @@ namespace Trees
             return description;
         }
 
-        void PostOrderHeightCalculation()
-        {
-            Stack<AVLNode> nodes = new Stack<AVLNode>();
-            nodes.Push(root);
-
-            List<int> usedIds = new List<int>();
-
-            bool finished = false;
-            bool finishedLeft = false;
-
-            while (!finished)
-            {
-                if (!finishedLeft)
-                {
-                    if (nodes.Peek().left == null)
-                    {
-                        finishedLeft = true;
-                    }
-                    else
-                    {
-                        nodes.Push(nodes.Peek().left);
-                    }
-                }
-                else
-                {
-                    AVLNode previous = null;
-                    while (nodes.Peek().right == null || nodes.Peek().right == previous)
-                    {
-                        if (nodes.Peek().parent == root && nodes.Peek().parent.right == nodes.Peek())
-                        {
-                            finished = true;
-                            nodes.Peek().CalculateHeight();
-
-                            break;
-                        }
-                        previous = nodes.Peek();
-                        if (!usedIds.Contains(nodes.Peek().id))
-                        {
-                            usedIds.Add(nodes.Peek().id);
-                            nodes.Pop().CalculateHeight();
-                        }
-                        else
-                        {
-                            nodes.Pop();
-                        }
-                        if (nodes.Count() == 0)
-                        {
-                            finished = true;
-                            return;
-                        }
-                    }
-                    finishedLeft = false;
-                    nodes.Push(nodes.Peek().right);
-                }
-            }
-        }
-
         public string LevelOrderTraverse()
         {
             string description = "{";
             bool finished = false;
 
-            List<AVLNode> previousNodes = new List<AVLNode>();
-            List<AVLNode> currentNodes = new List<AVLNode>();
+            List<RBNode> previousNodes = new List<RBNode>();
+            List<RBNode> currentNodes = new List<RBNode>();
 
             description += root.key + ", ";
             previousNodes.Add(root);
@@ -309,7 +252,7 @@ namespace Trees
             while (!finished)
             {
                 bool anyExist = false;
-                foreach (AVLNode node in previousNodes)
+                foreach (RBNode node in previousNodes)
                 {
                     if (node.left != null)
                     {
@@ -325,7 +268,7 @@ namespace Trees
                     }
                 }
                 previousNodes = currentNodes;
-                currentNodes = new List<AVLNode>();
+                currentNodes = new List<RBNode>();
 
                 if (!anyExist)
                 {
@@ -338,24 +281,24 @@ namespace Trees
             return description;
         }
 
-        public AVLNode Search(int key)
+        public RBNode Search(int key)
         {
             return BFS(key, root);
         }
 
-        AVLNode BFS(int key, AVLNode current)
+        RBNode BFS(int key, RBNode current)
         {
             if (current == null) return null;
             if (key == current.key) return current;
-            AVLNode right = BFS(key, current.right);
-            AVLNode left = BFS(key, current.left);
+            RBNode right = BFS(key, current.right);
+            RBNode left = BFS(key, current.left);
 
             return right != null ? right : left != null ? left : null;
         }
 
-        public AVLNode IterativeFind(int key)
+        public RBNode IterativeFind(int key)
         {
-            AVLNode current = root;
+            RBNode current = root;
 
             while (current != null && current.key != key)
             {
@@ -371,9 +314,9 @@ namespace Trees
             return current;
         }
 
-        public AVLNode Minimum()
+        public RBNode Minimum()
         {
-            AVLNode current = root;
+            RBNode current = root;
             while (current.left != null)
             {
                 current = current.left;
@@ -381,19 +324,19 @@ namespace Trees
             return current;
         }
 
-        public AVLNode Maximum()
+        public RBNode Maximum()
         {
-            AVLNode current = root;
+            RBNode current = root;
             while (current.right != null)
             {
                 current = current.right;
             }
             return current;
         }
-
-        public void Insert(AVLNode newNode)
-        {
-            AVLNode current = root;
+        
+        public void Insert(RBNode newNode)
+        {/*
+            RBNode current = root;
             if (current != null)
             {
                 while (true)
@@ -438,214 +381,10 @@ namespace Trees
                 root.CalculateHeight();
             }
             PostOrderHeightCalculation();
+            */
         }
 
-        public void Rebalance(AVLNode start)
-        {
-            AVLNode current = start;
-            while(current != root)
-            {
-                current.CalculateHeight();
-                /*
-                 rotate left:
-                 og right child becomes parent
-                 og right child, left child becomes your right child
-                 */
-                if (current.Balance() > 1)
-                {
-                    if (current.right.Balance() >= 0)
-                    {
-                        AVLNode right = current.right;
-                        current.right = current.right.left;
-                        if (current.right != null)
-                        {
-                            current.right.parent = current;
-                            current.right.left = null;
-                        }
-                        right.parent = current.parent;
-                        right.left = current;
-                        current.parent = right;
-                    }
-                    else
-                    {
-                        //Double rotate Left-Right
-
-                        //Right rotation on subNode
-                        AVLNode subCurrent = current.right;
-                        AVLNode left = subCurrent.left;
-                        subCurrent.left = subCurrent.left.right;
-                        if (subCurrent.left != null)
-                        {
-                            subCurrent.left.parent = current;
-                            subCurrent.left.right = null;
-                        }
-                        left.parent = subCurrent.parent;
-                        left.right = subCurrent;
-                        subCurrent.parent = left;
-
-                        //Left rotation on current Node
-                        AVLNode right = current.right;
-                        current.right = current.right.left;
-                        if (current.right != null)
-                        {
-                            current.right.parent = current;
-                            current.right.left = null;
-                        }
-                        right.parent = current.parent;
-                        right.left = current;
-                        current.parent = right;
-                    }
-                }else if(current.Balance() < -1)
-                {
-                    if (current.right.Balance() >= 0)
-                    {
-                        AVLNode left = current.left;
-                        current.left = current.left.right;
-                        if (current.left != null)
-                        {
-                            current.left.parent = current;
-                            current.left.right = null;
-                        }
-                        left.parent = current.parent;
-                        left.right = current;
-                        current.parent = left;
-                    }
-                    else
-                    {
-                        //Double rotate Right-Left
-
-                        //Left rotation on subNode
-                        AVLNode subCurrent = current.left;
-                        AVLNode right = subCurrent.right;
-                        subCurrent.right = subCurrent.right.left;
-                        if (subCurrent.right != null)
-                        {
-                            subCurrent.right.parent = current;
-                            subCurrent.right.left = null;
-                        }
-                        right.parent = subCurrent.parent;
-                        right.right = subCurrent;
-                        subCurrent.parent = right;
-
-                        //Right rotation on current Node
-                        AVLNode left = current.left;
-                        current.left = current.left.right;
-                        if (current.left != null)
-                        {
-                            current.left.parent = current;
-                            current.left.right = null;
-                        }
-                        left.parent = current.parent;
-                        left.left = current;
-                        current.parent = left;
-                    }
-                }
-
-                current = current.parent;
-            }
-            current.CalculateHeight();
-            /*
-             rotate left:
-             og right child becomes parent
-             og right child, left child becomes your right child
-             */
-            if (current.Balance() > 1)
-            {
-                if (current.right.Balance() >= 0)
-                {
-                    AVLNode right = current.right;
-                    current.right = current.right.left;
-                    if (current.right != null)
-                    {
-                        current.right.parent = current;
-                        current.right.left = null;
-                    }
-                    right.parent = current.parent;
-                    right.left = current;
-                    current.parent = right;
-                }
-                else
-                {
-                    //Double rotate Left-Right
-
-                    //Right rotation on subNode
-                    AVLNode subCurrent = current.right;
-                    AVLNode left = subCurrent.left;
-                    subCurrent.left = subCurrent.left.right;
-                    if (subCurrent.left != null)
-                    {
-                        subCurrent.left.parent = current;
-                        subCurrent.left.right = null;
-                    }
-                    left.parent = subCurrent.parent;
-                    left.right = subCurrent;
-                    subCurrent.parent = left;
-
-                    //Left rotation on current Node
-                    AVLNode right = current.right;
-                    current.right = current.right.left;
-                    if (current.right != null)
-                    {
-                        current.right.parent = current;
-                        current.right.left = null;
-                    }
-                    right.parent = current.parent;
-                    right.left = current;
-                    current.parent = right;
-                }
-            }
-            else if (current.Balance() < -1)
-            {
-                if (current.left.Balance() <= 0)
-                {
-                    AVLNode left = current.left;
-                    current.left = current.left.right;
-                    if (current.left != null)
-                    {
-                        current.left.parent = current;
-                        current.right.left = null;
-                    }
-                    left.parent = current.parent;
-                    left.right = current;
-                    current.parent = left;
-                }
-                else
-                {
-                    //Double rotate Right-Left
-
-                    //Left rotation on subNode
-                    AVLNode subCurrent = current.left;
-                    AVLNode right = subCurrent.right;
-                    subCurrent.right = subCurrent.right.left;
-                    if (subCurrent.right != null)
-                    {
-                        subCurrent.right.parent = current;
-                        subCurrent.right.left = null;
-                    }
-                    right.parent = subCurrent.parent;
-                    right.right = subCurrent;
-                    subCurrent.parent = right;
-
-                    //Right rotation on current Node
-                    AVLNode left = current.left;
-                    current.left = current.left.right;
-                    if (current.left != null)
-                    {
-                        current.left.parent = current;
-                        current.left.right = null;
-                    }
-                    left.parent = current.parent;
-                    left.left = current;
-                    current.parent = left;
-                }
-            }
-            while(root.parent != null)
-            {
-                root = root.parent;
-            }
-        }
-
-        public void Delete(AVLNode node)
+        public void Delete(RBNode node)
         {
             if (node.isLeaf())
             {
@@ -657,8 +396,6 @@ namespace Trees
                 {
                     node.parent.right = null;
                 }
-                PostOrderHeightCalculation();
-                Rebalance(node.parent);
             }
             else if (node.right != null && node.left == null)
             {
@@ -672,8 +409,6 @@ namespace Trees
                     node.parent.right = node.right;
                     node.right.parent = node.parent;
                 }
-                PostOrderHeightCalculation();
-                Rebalance(node.right);
             }
             else if (node.left != null && node.right == null)
             {
@@ -687,12 +422,10 @@ namespace Trees
                     node.parent.right = node.left;
                     node.right.parent = node.parent;
                 }
-                PostOrderHeightCalculation();
-                Rebalance(node.left);
             }
             else
             {
-                AVLNode greatest = node.left;
+                RBNode greatest = node.left;
                 while (greatest.right != null)
                 {
                     greatest = greatest.right;
@@ -700,27 +433,27 @@ namespace Trees
 
                 node.key = greatest.key;
                 greatest.parent.right = greatest.left;
-                AVLNode parent = greatest.parent;
+                RBNode parent = greatest.parent;
                 greatest.parent = node.parent;
-
-                PostOrderHeightCalculation();
-                Rebalance(parent);
             }
         }
     }
 
-    public class AVLNode
+    public class RBNode
     {
         public int id;
         public int key;
-        public int height;
-        public AVLNode parent = null;
-        public AVLNode left = null;
-        public AVLNode right = null;
+        public RBNode parent = null;
+        public RBNode left = null;
+        public RBNode right = null;
+        public ConsoleColor color = ConsoleColor.Black;
 
-        public AVLNode(int key)
+        public RBNode(int key, ConsoleColor color)
         {
+
+
             this.key = key;
+            this.color = color;
             id = ++AVL.highestId;
         }
 
@@ -731,32 +464,7 @@ namespace Trees
 
         public override string ToString()
         {
-            return "AVLNode: " + key;
-        }
-
-        public void CalculateHeight()
-        {
-            if (isLeaf()) height = 1;
-            else
-            {
-                if(right == null)
-                {
-                    height = left.height + 1;
-                }
-                else if(left == null)
-                {
-                    height = right.height + 1;
-                }
-                else
-                {
-                    height = right.height > left.height ? right.height + 1 : left.height + 1;
-                }
-            }
-        }
-
-        public int Balance()
-        {
-            return (right == null ? 0 : right.height) - (left == null ? 0 : left.height);
+            return "RBNode: " + key;
         }
     }
 }

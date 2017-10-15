@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +18,7 @@ namespace Trees
             tree.Insert(new AVLNode(8));
             tree.Insert(new AVLNode(10));
             tree.Insert(new AVLNode(11));
+            tree.Delete(tree.Search(9));
 
             Console.WriteLine("");
 
