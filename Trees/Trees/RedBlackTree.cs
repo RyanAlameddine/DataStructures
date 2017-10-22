@@ -11,6 +11,11 @@ namespace Trees
         public static int highestId = 0;
         RBNode root = null;
 
+        public RedBlackTree()
+        {
+            root = new RBNode(null);
+        }
+
         public string InOrderTraverse()
         {
             string description = "{";
@@ -246,7 +251,7 @@ namespace Trees
             List<RBNode> previousNodes = new List<RBNode>();
             List<RBNode> currentNodes = new List<RBNode>();
 
-            description += root.key + ", ";
+            description += root.key + ":" + root.color + ", ";
             previousNodes.Add(root);
 
             while (!finished)
@@ -257,13 +262,19 @@ namespace Trees
                     if (node.left != null)
                     {
                         anyExist = true;
-                        description += node.left.key + ", ";
+                        if (!node.left.NIL)
+                        {
+                            description += node.left.key + ":" + node.left.color + ", ";
+                        }
                         currentNodes.Add(node.left);
                     }
                     if (node.right != null)
                     {
                         anyExist = true;
-                        description += node.right.key + ", ";
+                        if (!node.right.NIL)
+                        {
+                            description += node.right.key + ":" + node.right.color + ", ";
+                        }
                         currentNodes.Add(node.right);
                     }
                 }
@@ -334,108 +345,179 @@ namespace Trees
             return current;
         }
         
-        public void Insert(RBNode newNode)
-        {/*
-            RBNode current = root;
-            if (current != null)
+        void InsertRuleCheck(RBNode x)
+        {
+            if (x.parent != null && x.parent.color == ConsoleColor.Red)
             {
-                while (true)
+                RBNode uncle = new RBNode(null);
+                if (x.parent.parent != null)
                 {
-                    if (current.key > newNode.key)
+                    if (x.parent.parent.left == x.parent)
                     {
-                        if (current.left != null)
+                        uncle = x.parent.parent.right;
+                    }
+                    else
+                    {
+                        uncle = x.parent.parent.left;
+                    }
+                }
+
+                if (uncle.color == ConsoleColor.Red)
+                {
+                    //I
+                    x.parent.color = ConsoleColor.Black;
+                    uncle.color = ConsoleColor.Black;
+
+                    //II
+                    x.parent.parent.color = ConsoleColor.Red;
+
+                    //III
+                    InsertRuleCheck(x.parent.parent);
+                }
+                else
+                {
+                    if (x.parent.parent.left == x.parent)
+                    {
+                        //I - Left Right Case
+                        if (x.parent.right == x)
                         {
-                            current = current.left;
+                            RBNode main = x;
+                            RBNode parent = main.parent;
+                            parent.right = main.left;
+                            main.left = parent;
+                            main.parent = parent.parent;
+
+                            if (parent.parent.left == parent) parent.parent.left = main;
+                            else parent.parent.right = main;
+
+                            parent.parent = main;
+                            x = x.left;
                         }
-                        else
+                        //II - Left Left Case
+                        if(x.parent.left == x)
                         {
-                            current.left = newNode;
-                            newNode.parent = current;
-                            newNode.CalculateHeight();
-                            PostOrderHeightCalculation();
-                            Rebalance(newNode);
-                            break;
+                            RBNode main = x.parent;
+                            RBNode parent = main.parent;
+                            parent.left = main.right;
+                            main.right = parent;
+                            main.parent = parent.parent;
+                            if (parent == root)
+                            {
+                                root = main;
+                            }
+                            else
+                            {
+                                if (parent.parent.right == parent) parent.parent.right = main;
+                                else parent.parent.left = main;
+                            }
+
+                            parent.parent = main;
+                            ConsoleColor color = main.color;
+                            main.color = parent.color;
+                            parent.color = color;
                         }
                     }
                     else
                     {
-                        if (current.right != null)
+                        //III - Right Left Case
+                        if (x.parent.left == x)
                         {
-                            current = current.right;
+                            RBNode main = x;
+                            RBNode parent = main.parent;
+                            parent.left = main.right;
+                            main.right = parent;
+                            main.parent = parent.parent;
+
+                            if (parent.parent.right == parent) parent.parent.right = main;
+                            else parent.parent.left = main;
+
+                            parent.parent = main;
+                            x = x.right;
                         }
-                        else
+                        //II - Right Right Case
+                        if(x.parent.right == x)
                         {
-                            current.right = newNode;
-                            newNode.parent = current;
-                            newNode.CalculateHeight();
-                            PostOrderHeightCalculation();
-                            Rebalance(newNode);
-                            break;
+                            RBNode main = x.parent;
+                            RBNode parent = main.parent;
+                            parent.right = main.left;
+                            main.left = parent;
+                            main.parent = parent.parent;
+                            if (parent == root)
+                            {
+                                root = main;
+                            }
+                            else
+                            {
+                                if (parent.parent.left == parent) parent.parent.left = main;
+                                else parent.parent.right = main;
+                            }
+
+                            parent.parent = main;
+                            ConsoleColor color = main.color;
+                            main.color = parent.color;
+                            parent.color = color;
                         }
                     }
                 }
             }
+            root.color = ConsoleColor.Black;
+        }
+
+        public void Insert(RBNode newNode)
+        {
+            RBNode current = root;
+            if (current.NIL) { 
+                newNode.left = root;
+                root.parent = newNode;
+                newNode.right = new RBNode(newNode);
+                root = newNode;
+                root.color = ConsoleColor.Black;
+            }
             else
             {
-                root = newNode;
-                root.CalculateHeight();
+                while (true)
+                {
+                    if(current.key > newNode.key)
+                    {
+                        if (current.left.NIL)
+                        {
+                            current.left = newNode;
+                            newNode.parent = current;
+                            current.left.left = new RBNode(current.left);
+                            current.left.right = new RBNode(current.left);
+                            current.left.color = ConsoleColor.Red;
+                            InsertRuleCheck(current.left);
+                            return;
+                        }
+                        else
+                        {
+                            current = current.left;
+                        }
+                    }
+                    else
+                    {
+                        if (current.right.NIL)
+                        {
+                            current.right = newNode;
+                            newNode.parent = current;
+                            current.right.right = new RBNode(current.right);
+                            current.right.left = new RBNode(current.right);
+                            current.right.color = ConsoleColor.Red;
+                            InsertRuleCheck(current.right);
+                            return;
+                        }
+                        else
+                        {
+                            current = current.right;
+                        }
+                    }
+                }
             }
-            PostOrderHeightCalculation();
-            */
         }
 
         public void Delete(RBNode node)
         {
-            if (node.isLeaf())
-            {
-                if (node.parent.left == node)
-                {
-                    node.parent.left = null;
-                }
-                else
-                {
-                    node.parent.right = null;
-                }
-            }
-            else if (node.right != null && node.left == null)
-            {
-                if (node.parent.left == node)
-                {
-                    node.parent.left = node.right;
-                    node.left.parent = node.parent;
-                }
-                else
-                {
-                    node.parent.right = node.right;
-                    node.right.parent = node.parent;
-                }
-            }
-            else if (node.left != null && node.right == null)
-            {
-                if (node.parent.left == node)
-                {
-                    node.parent.left = node.left;
-                    node.left.parent = node.parent;
-                }
-                else
-                {
-                    node.parent.right = node.left;
-                    node.right.parent = node.parent;
-                }
-            }
-            else
-            {
-                RBNode greatest = node.left;
-                while (greatest.right != null)
-                {
-                    greatest = greatest.right;
-                }
-
-                node.key = greatest.key;
-                greatest.parent.right = greatest.left;
-                RBNode parent = greatest.parent;
-                greatest.parent = node.parent;
-            }
+            
         }
     }
 
@@ -447,14 +529,19 @@ namespace Trees
         public RBNode left = null;
         public RBNode right = null;
         public ConsoleColor color = ConsoleColor.Black;
+        public bool NIL = false;
 
-        public RBNode(int key, ConsoleColor color)
+        public RBNode(int key)
         {
-
-
             this.key = key;
-            this.color = color;
             id = ++AVL.highestId;
+        }
+
+        public RBNode(RBNode NILParent)
+        {
+            NIL = true;
+            color = ConsoleColor.Black;
+            parent = NILParent;
         }
 
         public bool isLeaf()
@@ -464,7 +551,7 @@ namespace Trees
 
         public override string ToString()
         {
-            return "RBNode: " + key;
+            return "RBNode: " + key + ", Color: " + color;
         }
     }
 }

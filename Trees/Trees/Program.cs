@@ -11,25 +11,14 @@ namespace Trees
     {
         static void Main(string[] args)
         {
-            AVL tree = new AVL();
-            tree.Insert(new AVLNode(5));
-            tree.Insert(new AVLNode(7));
-            tree.Insert(new AVLNode(9));
-            tree.Insert(new AVLNode(8));
-            tree.Insert(new AVLNode(10));
-            tree.Insert(new AVLNode(11));
-            tree.Delete(tree.Search(9));
+            RedBlackTree tree = new RedBlackTree();
 
-            Console.WriteLine("");
+            tree.Insert(new RBNode(8));
+            tree.Insert(new RBNode(5));
+            tree.Insert(new RBNode(7));
+            tree.Insert(new RBNode(11));
+            tree.Insert(new RBNode(9));
 
-            Console.WriteLine(tree.Minimum().key);
-            Console.WriteLine(tree.Maximum().key);
-
-            Console.WriteLine("");
-
-            Console.WriteLine(tree.InOrderTraverse());
-            Console.WriteLine(tree.PreOrderTraverse());
-            Console.WriteLine(tree.PostOrderTraverse());
             Console.WriteLine(tree.LevelOrderTraverse());
 
             Console.WriteLine("");
