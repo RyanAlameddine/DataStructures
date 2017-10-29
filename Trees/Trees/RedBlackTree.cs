@@ -251,7 +251,7 @@ namespace Trees
             List<RBNode> previousNodes = new List<RBNode>();
             List<RBNode> currentNodes = new List<RBNode>();
 
-            description += root.key + ":" + root.color + ", ";
+            description += root.ToString();
             previousNodes.Add(root);
 
             while (!finished)
@@ -264,7 +264,7 @@ namespace Trees
                         anyExist = true;
                         if (!node.left.NIL)
                         {
-                            description += node.left.key + ":" + node.left.color + ", ";
+                            description += node.left.ToString();
                         }
                         currentNodes.Add(node.left);
                     }
@@ -273,7 +273,7 @@ namespace Trees
                         anyExist = true;
                         if (!node.right.NIL)
                         {
-                            description += node.right.key + ":" + node.right.color + ", ";
+                            description += node.right.ToString();
                         }
                         currentNodes.Add(node.right);
                     }
@@ -515,9 +515,116 @@ namespace Trees
             }
         }
 
-        public void Delete(RBNode node)
+        public void Delete(RBNode v)
         {
-            
+            RBNode u; //replaces v
+
+            if (v.isLeaf())
+            {
+                if(v.parent.right == v)
+                {
+                    v.parent.right = new RBNode(v.parent);
+                    u = v.parent.right;
+                }
+                else
+                {
+                    v.parent.left = new RBNode(v.parent);
+                    u = v.parent.left;
+                }
+            }else if(v.right.NIL)
+            {
+                if (v.parent.right == v)
+                {
+                    v.parent.right = v.left;
+                    v.left.parent = v.parent;
+                }
+                else
+                {
+                    v.parent.left = v.left;
+                    v.left.parent = v.parent;
+                }
+                u = v.left;
+            }
+            else if(v.left.NIL)
+            {
+                if (v.parent.right == v)
+                {
+                    v.parent.right = v.right;
+                    v.right.parent = v.parent;
+                }
+                else
+                {
+                    v.parent.left = v.right;
+                    v.right.parent = v.parent;
+                }
+                u = v.right;
+            }
+            else
+            {
+                RBNode current = v.left;
+                while (!v.right.NIL)
+                {
+                    current = current.right;
+                }
+                u = current;
+                v.key = current.key;
+                Delete(current);
+            }
+            DeleteRuleCheck(u, v);
+        }
+
+        void DeleteRuleCheck(RBNode u, RBNode v)
+        {
+            if(u.color == ConsoleColor.Red || v.color == ConsoleColor.Red)
+            {
+                u.color = ConsoleColor.Black;
+            }else
+            {
+                RBNode s = v.parent.right == v ? v.parent.left : v.parent.right;
+                RBNode r = null;
+                List<RBNode> layer = new List<RBNode>();
+                layer.Add(s.left);
+                layer.Add(s.right);
+                while(r == null)
+                {
+                    foreach(RBNode current in layer)
+                    {
+                        if (current.color == ConsoleColor.Red)
+                        {
+                            r = current;
+                            break;
+                        }
+                        else
+                        {
+                            layer.Remove(current);
+                            if(current.left != null)
+                            {
+                                layer.Add(current.left);
+                            }
+                            if(current.right != null)
+                            {
+                                layer.Add(current.right);
+                            }
+                        }
+                    }
+                    if (layer.Count == 0) break;
+                }
+                if (s.color == ConsoleColor.Black && r != null)
+                {
+                    InsertRuleCheck(s);
+                }
+                if(s.color == ConsoleColor.Black && s.left.color == ConsoleColor.Black && s.right.color == ConsoleColor.Black)
+                {
+                    s.color = ConsoleColor.Red;
+                    s.parent.color = ConsoleColor.DarkBlue;
+                    //TODO fix this
+                }
+                if(s.color == ConsoleColor.Red)
+                {
+
+                }
+                if (u == root) u.color = ConsoleColor.Black;
+            }
         }
     }
 
@@ -551,7 +658,7 @@ namespace Trees
 
         public override string ToString()
         {
-            return "RBNode: " + key + ", Color: " + color;
+            return "RBNode: " + key;
         }
     }
 }

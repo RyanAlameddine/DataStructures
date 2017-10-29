@@ -46,7 +46,7 @@ namespace Trees
             }
             catch (NullReferenceException e)
             {
-                throw (new Exception("No head to return"));
+                throw (new InvalidOperationException("No head to return"));
             }
             head = head.Next;
 
