@@ -264,7 +264,7 @@ namespace Trees
                         anyExist = true;
                         if (!node.left.NIL)
                         {
-                            description += node.left.ToString();
+                            description += ", " + node.left.ToString();
                         }
                         currentNodes.Add(node.left);
                     }
@@ -273,7 +273,7 @@ namespace Trees
                         anyExist = true;
                         if (!node.right.NIL)
                         {
-                            description += node.right.ToString();
+                            description += ", " + node.right.ToString();
                         }
                         currentNodes.Add(node.right);
                     }
@@ -287,7 +287,6 @@ namespace Trees
                 }
             }
 
-            description = description.Remove(description.Count() - 2, 2);
             description += "}";
             return description;
         }
@@ -515,116 +514,91 @@ namespace Trees
             }
         }
 
-        public void Delete(RBNode v)
+        public void Delete(RBNode delete)
         {
             RBNode u; //replaces v
+            RBNode v;
 
-            if (v.isLeaf())
+            if (delete.isLeaf())
             {
-                if(v.parent.right == v)
-                {
-                    v.parent.right = new RBNode(v.parent);
-                    u = v.parent.right;
-                }
-                else
-                {
-                    v.parent.left = new RBNode(v.parent);
-                    u = v.parent.left;
-                }
-            }else if(v.right.NIL)
-            {
-                if (v.parent.right == v)
-                {
-                    v.parent.right = v.left;
-                    v.left.parent = v.parent;
-                }
-                else
-                {
-                    v.parent.left = v.left;
-                    v.left.parent = v.parent;
-                }
-                u = v.left;
+                u = delete.Destruct();
+                v = delete;
             }
-            else if(v.left.NIL)
+            else if(!delete.left.NIL && delete.right.NIL)
             {
-                if (v.parent.right == v)
+                delete.left.parent = delete.parent;
+                v = delete;
+                u = delete.left;
+                if(delete.parent.left == delete)
                 {
-                    v.parent.right = v.right;
-                    v.right.parent = v.parent;
+                    delete.parent.left = delete.left;
                 }
                 else
                 {
-                    v.parent.left = v.right;
-                    v.right.parent = v.parent;
+                    delete.parent.right = delete.left;
                 }
-                u = v.right;
+            }else if (delete.left.NIL)
+            {
+                delete.right.parent = delete.parent;
+                v = delete;
+                u = delete.right;
+                if (delete.parent.left == delete)
+                {
+                    delete.parent.left = delete.right;
+                }
+                else
+                {
+                    delete.parent.right = delete.right;
+                }
             }
             else
             {
-                RBNode current = v.left;
-                while (!v.right.NIL)
+                RBNode current = delete.left;
+                while (!current.right.NIL)
                 {
                     current = current.right;
                 }
-                u = current;
-                v.key = current.key;
-                Delete(current);
+
+                delete.key = current.key;
+                v = current;
+                bool left = v.parent.left == v ? true : false;
+                Delete(v);
+                if (left)
+                {
+                    u = v.parent.left;
+                }
+                else
+                {
+                    u = v.parent.right;
+                }
             }
-            DeleteRuleCheck(u, v);
+            DeleteRuleCheck(u, delete);
         }
 
         void DeleteRuleCheck(RBNode u, RBNode v)
         {
-            if(u.color == ConsoleColor.Red || v.color == ConsoleColor.Red)
+            if (u.color == ConsoleColor.Red || v.color == ConsoleColor.Red)
             {
                 u.color = ConsoleColor.Black;
-            }else
+            } else if (u.color == ConsoleColor.Black && v.color == ConsoleColor.Black)
             {
-                RBNode s = v.parent.right == v ? v.parent.left : v.parent.right;
-                RBNode r = null;
-                List<RBNode> layer = new List<RBNode>();
-                layer.Add(s.left);
-                layer.Add(s.right);
-                while(r == null)
-                {
-                    foreach(RBNode current in layer)
-                    {
-                        if (current.color == ConsoleColor.Red)
-                        {
-                            r = current;
-                            break;
-                        }
-                        else
-                        {
-                            layer.Remove(current);
-                            if(current.left != null)
-                            {
-                                layer.Add(current.left);
-                            }
-                            if(current.right != null)
-                            {
-                                layer.Add(current.right);
-                            }
-                        }
-                    }
-                    if (layer.Count == 0) break;
-                }
-                if (s.color == ConsoleColor.Black && r != null)
-                {
-                    InsertRuleCheck(s);
-                }
-                if(s.color == ConsoleColor.Black && s.left.color == ConsoleColor.Black && s.right.color == ConsoleColor.Black)
-                {
-                    s.color = ConsoleColor.Red;
-                    s.parent.color = ConsoleColor.DarkBlue;
-                    //TODO fix this
-                }
-                if(s.color == ConsoleColor.Red)
-                {
+                u.color = ConsoleColor.DarkBlue;
 
+                RBNode s = u.parent.left == u ? u.parent.right : u.parent.left;
+                while(u.color == ConsoleColor.DarkBlue)
+                {
+                    RBNode r = s.left.color == ConsoleColor.Red ? s.left : s.right.color == ConsoleColor.Red ? s.right : null;
+                    if (s.color == ConsoleColor.Black)
+                    {
+                        Rotations(s, r);
+                    }
                 }
-                if (u == root) u.color = ConsoleColor.Black;
             }
+        }
+
+        void Rotations(RBNode s, RBNode r)
+        {
+
         }
     }
 
@@ -635,7 +609,7 @@ namespace Trees
         public RBNode parent = null;
         public RBNode left = null;
         public RBNode right = null;
-        public ConsoleColor color = ConsoleColor.Black;
+        public ConsoleColor color = ConsoleColor.White;
         public bool NIL = false;
 
         public RBNode(int key)
@@ -658,7 +632,21 @@ namespace Trees
 
         public override string ToString()
         {
-            return "RBNode: " + key;
+            return color.ToString() + "Node: " + key;
+        }
+
+        public RBNode Destruct()
+        {
+            if(parent.right == this)
+            {
+                parent.right = new RBNode(parent);
+                return parent.right;
+            }
+            else
+            {
+                parent.left = new RBNode(parent);
+                return parent.left;
+            }
         }
     }
 }

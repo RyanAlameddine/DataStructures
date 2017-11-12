@@ -177,10 +177,6 @@ namespace Trees
                 else
                 {
                     TNode previous = null;
-                    if (nodes.Peek().key == 6)
-                    {
-                        int xxxxxx = 0;
-                    }
                     while (nodes.Peek().right == null || nodes.Peek().right == previous)
                     {
                         previous = nodes.Peek();
