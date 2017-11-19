@@ -346,7 +346,7 @@ namespace Trees
         
         void InsertRuleCheck(RBNode x)
         {
-            if (x.parent != null && x.parent.color == ConsoleColor.Red)
+            if (x.parent != null && x.parent.Color == ConsoleColor.Red)
             {
                 RBNode uncle = new RBNode(null);
                 if (x.parent.parent != null)
@@ -361,14 +361,14 @@ namespace Trees
                     }
                 }
 
-                if (uncle.color == ConsoleColor.Red)
+                if (uncle.Color == ConsoleColor.Red)
                 {
                     //I
-                    x.parent.color = ConsoleColor.Black;
-                    uncle.color = ConsoleColor.Black;
+                    x.parent.Color = ConsoleColor.Black;
+                    uncle.Color = ConsoleColor.Black;
 
                     //II
-                    x.parent.parent.color = ConsoleColor.Red;
+                    x.parent.parent.Color = ConsoleColor.Red;
 
                     //III
                     InsertRuleCheck(x.parent.parent);
@@ -411,9 +411,9 @@ namespace Trees
                             }
 
                             parent.parent = main;
-                            ConsoleColor color = main.color;
-                            main.color = parent.color;
-                            parent.color = color;
+                            ConsoleColor color = main.Color;
+                            main.Color = parent.Color;
+                            parent.Color = color;
                         }
                     }
                     else
@@ -452,14 +452,14 @@ namespace Trees
                             }
 
                             parent.parent = main;
-                            ConsoleColor color = main.color;
-                            main.color = parent.color;
-                            parent.color = color;
+                            ConsoleColor color = main.Color;
+                            main.Color = parent.Color;
+                            parent.Color = color;
                         }
                     }
                 }
             }
-            root.color = ConsoleColor.Black;
+            root.Color = ConsoleColor.Black;
         }
 
         public void Insert(RBNode newNode)
@@ -470,7 +470,7 @@ namespace Trees
                 root.parent = newNode;
                 newNode.right = new RBNode(newNode);
                 root = newNode;
-                root.color = ConsoleColor.Black;
+                root.Color = ConsoleColor.Black;
             }
             else
             {
@@ -484,7 +484,7 @@ namespace Trees
                             newNode.parent = current;
                             current.left.left = new RBNode(current.left);
                             current.left.right = new RBNode(current.left);
-                            current.left.color = ConsoleColor.Red;
+                            current.left.Color = ConsoleColor.Red;
                             InsertRuleCheck(current.left);
                             return;
                         }
@@ -501,7 +501,7 @@ namespace Trees
                             newNode.parent = current;
                             current.right.right = new RBNode(current.right);
                             current.right.left = new RBNode(current.right);
-                            current.right.color = ConsoleColor.Red;
+                            current.right.Color = ConsoleColor.Red;
                             InsertRuleCheck(current.right);
                             return;
                         }
@@ -577,28 +577,195 @@ namespace Trees
 
         void DeleteRuleCheck(RBNode u, RBNode v)
         {
-            if (u.color == ConsoleColor.Red || v.color == ConsoleColor.Red)
+            if (u.Color == ConsoleColor.Red || v.Color == ConsoleColor.Red)
             {
-                u.color = ConsoleColor.Black;
-            } else if (u.color == ConsoleColor.Black && v.color == ConsoleColor.Black)
+                u.Color = ConsoleColor.Black;
+            } else if (u.Color == ConsoleColor.Black && v.Color == ConsoleColor.Black)
             {
-                u.color = ConsoleColor.DarkBlue;
+                u.Color = ConsoleColor.DarkBlue;
 
                 RBNode s = u.parent.left == u ? u.parent.right : u.parent.left;
-                while(u.color == ConsoleColor.DarkBlue)
+                while(u.Color == ConsoleColor.DarkBlue || u != root)
                 {
-                    RBNode r = s.left.color == ConsoleColor.Red ? s.left : s.right.color == ConsoleColor.Red ? s.right : null;
-                    if (s.color == ConsoleColor.Black)
+                    RBNode r = s.left.Color == ConsoleColor.Red ? s.left : s.right.Color == ConsoleColor.Red ? s.right : null;
+                    if (s.Color == ConsoleColor.Black && r != null)
                     {
-                        Rotations(s, r);
+                        Rotations(s);
                     }
+                    else if (s.Color == ConsoleColor.Black && r == null)
+                    {
+                        s.Color = ConsoleColor.Red;
+                        if (s.parent.Color == ConsoleColor.Red)
+                        {
+                            s.parent.Color = ConsoleColor.Black;
+                            break;
+                        }
+                        else
+                        {
+                            s.parent.Color = ConsoleColor.DarkBlue;
+                            u = s.parent;
+                            v = u.parent;
+                            s = v.left == u ? v.right : v.left;
+                        }
+                    }else if(s.Color == ConsoleColor.Red)
+                    {
+                        bool sRightChild = s.isRightChild();
+
+                        if (sRightChild)
+                        {
+                            //rotate left
+                            RBNode main              = s;
+                            RBNode originalParent    = main.parent;
+                            bool originalParentRight = originalParent.isRightChild();
+                            RBNode parentParent      = originalParent.parent;
+                            RBNode leftChildren      = main.left;
+
+                            originalParent.right  = leftChildren;
+                            leftChildren.parent   = originalParent;
+                            main.left             = originalParent;
+                            originalParent.parent = main;
+                            main.parent           = parentParent;
+
+                            if (main.parent == null) root = main;
+                            else
+                            {
+                                if (originalParentRight) parentParent.right = main;
+                                else parentParent.left = main;
+                            }
+                        }
+                        else
+                        {
+                            //rotate right
+                            RBNode main              = s;
+                            RBNode originalParent    = main.parent;
+                            bool originalParentLeft  = !originalParent.isRightChild();
+                            RBNode parentParent      = originalParent.parent;
+                            RBNode rightChildren     = main.right;
+
+                            originalParent.left   = rightChildren;
+                            rightChildren.parent  = originalParent;
+                            main.right            = originalParent;
+                            originalParent.parent = main;
+                            main.parent           = parentParent;
+
+                            if (main.parent == null) root = main;
+                            else
+                            {
+                                if (originalParentLeft) parentParent.left = main;
+                                else parentParent.right = main;
+                            }
+                            
+                        }
+                    }
+                }
+
+                if(u == root)
+                {
+                    u.Color = ConsoleColor.Black;
+                    return;
                 }
             }
         }
 
-        void Rotations(RBNode s, RBNode r)
-        {
+        void Rotations(RBNode s)
+        {   //      root
+            //    p      0
+            //  s   0     0
+            // r 0       0 0
+            //00 00         
 
+            RBNode parent = s.parent;
+            //Left-Right
+            if (s.isRightChild() && !parent.isRightChild())
+            {
+                //Rotate parent left
+                RBNode main              = parent;
+                RBNode originalParent    = main.parent;
+                bool originalParentRight = originalParent.isRightChild();
+                RBNode parentParent      = originalParent.parent;
+                RBNode leftChildren      = parent.left;
+
+                originalParent.right  = leftChildren;
+                leftChildren.parent   = originalParent;
+                parent.left           = originalParent;
+                originalParent.parent = parent;
+                parent.parent         = parentParent;
+
+
+                if (originalParentRight) parentParent.right = parent;
+                else parentParent.left = parent;
+            }
+            //Left-Left
+            if (!s.isRightChild() && !parent.isRightChild())
+            {
+                //Rotate grandparent right and swap color of grandparent and parent
+                RBNode main             = parent.parent;
+                RBNode originalParent   = main.parent;
+                bool originalParentLeft = !originalParent.isRightChild();
+                RBNode parentParent     = originalParent.parent;
+                RBNode rightChildren    = main.right;
+
+                originalParent.left   = rightChildren;
+                rightChildren.parent  = originalParent;
+                main.right            = originalParent;
+                originalParent.parent = main;
+                main.parent           = parentParent;
+
+
+                if (originalParentLeft) parentParent.left = main;
+                else parentParent.right = main;
+
+                ConsoleColor parentColor = parent.Color;
+                parent.Color = main.Color;
+                main.Color = parentColor;
+                return;
+            }
+
+            //Right-Left
+            if (!s.isRightChild() && parent.isRightChild())
+            {
+                //Rotate parent right
+                RBNode main              = parent;
+                RBNode originalParent    = main.parent;
+                bool originalParentLeft  = !originalParent.isRightChild();
+                RBNode parentParent      = originalParent.parent;
+                RBNode rightChildren     = parent.right;
+
+                originalParent.left   = rightChildren;
+                rightChildren.parent  = originalParent;
+                parent.right          = originalParent;
+                originalParent.parent = parent;
+                parent.parent         = parentParent;
+
+
+                if (originalParentLeft) parentParent.left = parent;
+                else parentParent.right = parent;
+            }
+            //Right-Right
+            if (s.isRightChild() && parent.isRightChild())
+            {
+                //Rotate grandparent left and swap color of grandparent and parent
+                RBNode main              = parent.parent;
+                RBNode originalParent    = main.parent;
+                bool originalParentRight = originalParent.isRightChild();
+                RBNode parentParent      = originalParent.parent;
+                RBNode leftChildren      = main.left;
+
+                originalParent.right  = leftChildren;
+                leftChildren.parent   = originalParent;
+                main.left             = originalParent;
+                originalParent.parent = main;
+                main.parent           = parentParent;
+
+
+                if (originalParentRight) parentParent.right = main;
+                else parentParent.left = main;
+
+                ConsoleColor parentColor = parent.Color;
+                parent.Color = main.Color;
+                main.Color = parentColor;
+                return;
+            }
         }
     }
 
@@ -609,7 +776,12 @@ namespace Trees
         public RBNode parent = null;
         public RBNode left = null;
         public RBNode right = null;
-        public ConsoleColor color = ConsoleColor.White;
+        public ConsoleColor Color
+        {
+            get { return color; }
+            set { if (color == ConsoleColor.DarkBlue && value == ConsoleColor.Red) color = ConsoleColor.Black; else { color = value; } }
+        }
+        ConsoleColor color = ConsoleColor.White;
         public bool NIL = false;
 
         public RBNode(int key)
@@ -632,7 +804,7 @@ namespace Trees
 
         public override string ToString()
         {
-            return color.ToString() + "Node: " + key;
+            return Color.ToString() + "Node: " + key;
         }
 
         public RBNode Destruct()
@@ -647,6 +819,12 @@ namespace Trees
                 parent.left = new RBNode(parent);
                 return parent.left;
             }
+        }
+
+        public bool isRightChild()
+        {
+            if (parent == null) return false;
+            return parent.right == this;
         }
     }
 }

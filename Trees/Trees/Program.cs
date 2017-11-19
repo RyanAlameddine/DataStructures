@@ -11,20 +11,6 @@ namespace Trees
     {
         static void Main(string[] args)
         {
-            float x = 0.7f;
-            float y = 0.1f;
-            float z = x + y;
-            Console.WriteLine(z);
-
-
-            //Console.WriteLine(a + b);
-
-            for (float i = 0; i < 1; i += 0.1f)
-            {
-                Console.WriteLine(i);
-            }
-            Console.ReadLine();
-
             RedBlackTree tree = new RedBlackTree();
 
             tree.Insert(new RBNode(8));
@@ -38,6 +24,12 @@ namespace Trees
             Console.WriteLine(tree.LevelOrderTraverse());
 
             Console.WriteLine("");
+
+            RBNode eleven = tree.Search(11);
+
+            tree.Delete(eleven);
+
+            Console.WriteLine(tree.LevelOrderTraverse());
 
             Console.ReadKey();
         }
