@@ -25,9 +25,9 @@ namespace Trees
 
             Console.WriteLine("");
 
-            RBNode eleven = tree.Search(11);
+            RBNode del = tree.Search(9);
 
-            tree.Delete(eleven);
+            tree.Delete(del);
 
             Console.WriteLine(tree.LevelOrderTraverse());
 

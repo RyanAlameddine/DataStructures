@@ -514,7 +514,7 @@ namespace Trees
             }
         }
 
-        public void Delete(RBNode delete)
+        public RBNode Delete(RBNode delete)
         {
             RBNode u; //replaces v
             RBNode v;
@@ -561,18 +561,13 @@ namespace Trees
 
                 delete.key = current.key;
                 v = current;
+                delete = v;
                 bool left = v.parent.left == v ? true : false;
-                Delete(v);
-                if (left)
-                {
-                    u = v.parent.left;
-                }
-                else
-                {
-                    u = v.parent.right;
-                }
+                u = Delete(v);
+
             }
             DeleteRuleCheck(u, delete);
+            return u;
         }
 
         void DeleteRuleCheck(RBNode u, RBNode v)
@@ -675,12 +670,12 @@ namespace Trees
             //00 00         
 
             RBNode parent = s.parent;
+
             //Left-Right
-            if (s.isRightChild() && !parent.isRightChild())
+            if ( s.isRightChild() && !parent.isRightChild())
             {
                 //Rotate parent left
-                RBNode main              = parent;
-                RBNode originalParent    = main.parent;
+                RBNode originalParent    = s;
                 bool originalParentRight = originalParent.isRightChild();
                 RBNode parentParent      = originalParent.parent;
                 RBNode leftChildren      = parent.left;
@@ -699,7 +694,7 @@ namespace Trees
             if (!s.isRightChild() && !parent.isRightChild())
             {
                 //Rotate grandparent right and swap color of grandparent and parent
-                RBNode main             = parent.parent;
+                RBNode main             = s;
                 RBNode originalParent   = main.parent;
                 bool originalParentLeft = !originalParent.isRightChild();
                 RBNode parentParent     = originalParent.parent;
@@ -725,8 +720,7 @@ namespace Trees
             if (!s.isRightChild() && parent.isRightChild())
             {
                 //Rotate parent right
-                RBNode main              = parent;
-                RBNode originalParent    = main.parent;
+                RBNode originalParent    = s;
                 bool originalParentLeft  = !originalParent.isRightChild();
                 RBNode parentParent      = originalParent.parent;
                 RBNode rightChildren     = parent.right;
@@ -742,11 +736,12 @@ namespace Trees
                 else parentParent.right = parent;
             }
             //Right-Right
-            if (s.isRightChild() && parent.isRightChild())
+            if ( s.isRightChild() && parent.isRightChild())
             {
                 //Rotate grandparent left and swap color of grandparent and parent
-                RBNode main              = parent.parent;
+                RBNode main              = s;
                 RBNode originalParent    = main.parent;
+
                 bool originalParentRight = originalParent.isRightChild();
                 RBNode parentParent      = originalParent.parent;
                 RBNode leftChildren      = main.left;
@@ -759,7 +754,11 @@ namespace Trees
 
 
                 if (originalParentRight) parentParent.right = main;
-                else parentParent.left = main;
+                else if(parentParent != null) parentParent.left = main;
+                else
+                {
+                    root = main;
+                }
 
                 ConsoleColor parentColor = parent.Color;
                 parent.Color = main.Color;
