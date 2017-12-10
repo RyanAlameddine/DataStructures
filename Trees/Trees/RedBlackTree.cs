@@ -523,6 +523,7 @@ namespace Trees
             {
                 u = delete.Destruct();
                 v = delete;
+                DeleteRuleCheck(u, delete);
             }
             else if(!delete.left.NIL && delete.right.NIL)
             {
@@ -537,7 +538,9 @@ namespace Trees
                 {
                     delete.parent.right = delete.left;
                 }
-            }else if (delete.left.NIL)
+                DeleteRuleCheck(u, delete);
+            }
+            else if (delete.left.NIL)
             {
                 delete.right.parent = delete.parent;
                 v = delete;
@@ -550,6 +553,7 @@ namespace Trees
                 {
                     delete.parent.right = delete.right;
                 }
+                DeleteRuleCheck(u, delete);
             }
             else
             {
@@ -566,7 +570,7 @@ namespace Trees
                 u = Delete(v);
 
             }
-            DeleteRuleCheck(u, delete);
+            
             return u;
         }
 
@@ -580,12 +584,12 @@ namespace Trees
                 u.Color = ConsoleColor.DarkBlue;
 
                 RBNode s = u.parent.left == u ? u.parent.right : u.parent.left;
-                while(u.Color == ConsoleColor.DarkBlue || u != root)
+                while(u.Color == ConsoleColor.DarkBlue && u != root)
                 {
                     RBNode r = s.left.Color == ConsoleColor.Red ? s.left : s.right.Color == ConsoleColor.Red ? s.right : null;
                     if (s.Color == ConsoleColor.Black && r != null)
                     {
-                        Rotations(s);
+                        Rotations(s, u);
                     }
                     else if (s.Color == ConsoleColor.Black && r == null)
                     {
@@ -662,7 +666,7 @@ namespace Trees
             }
         }
 
-        void Rotations(RBNode s)
+        void Rotations(RBNode s, RBNode DoubleBlack)
         {   //      root
             //    p      0
             //  s   0     0
@@ -689,6 +693,8 @@ namespace Trees
 
                 if (originalParentRight) parentParent.right = parent;
                 else parentParent.left = parent;
+
+                DoubleBlack.Color = ConsoleColor.Black;
             }
             //Left-Left
             if (!s.isRightChild() && !parent.isRightChild())
@@ -711,8 +717,20 @@ namespace Trees
                 else parentParent.right = main;
 
                 ConsoleColor parentColor = parent.Color;
-                parent.Color = main.Color;
-                main.Color = parentColor;
+                if (main.Color == ConsoleColor.Black && main.left.Color == ConsoleColor.Red)
+                {
+                    main.left.Color = ConsoleColor.Black;
+                    main.right.Color = ConsoleColor.Black;
+
+                    main.Color = ConsoleColor.Red;
+                }
+                else
+                {
+                    parent.Color = main.Color;
+                    main.Color = parentColor;
+                }
+
+                DoubleBlack.Color = ConsoleColor.Black;
                 return;
             }
 
@@ -734,6 +752,8 @@ namespace Trees
 
                 if (originalParentLeft) parentParent.left = parent;
                 else parentParent.right = parent;
+
+                DoubleBlack.Color = ConsoleColor.Black;
             }
             //Right-Right
             if ( s.isRightChild() && parent.isRightChild())
@@ -761,8 +781,20 @@ namespace Trees
                 }
 
                 ConsoleColor parentColor = parent.Color;
-                parent.Color = main.Color;
-                main.Color = parentColor;
+                if (main.Color == ConsoleColor.Black && main.left.Color == ConsoleColor.Red)
+                {
+                    main.left.Color = ConsoleColor.Black;
+                    main.right.Color = ConsoleColor.Black;
+
+                    main.Color = ConsoleColor.Red;
+                }
+                else
+                {
+                    parent.Color = main.Color;
+                    main.Color = parentColor;
+                }
+
+                DoubleBlack.Color = ConsoleColor.Black;
                 return;
             }
         }
@@ -798,7 +830,7 @@ namespace Trees
 
         public bool isLeaf()
         {
-            return left == null && right == null;
+            return left.NIL && right.NIL;
         }
 
         public override string ToString()
