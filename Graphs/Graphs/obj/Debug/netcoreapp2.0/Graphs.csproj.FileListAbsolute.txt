@@ -1,0 +1,11 @@
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\bin\Debug\netcoreapp2.0\Graphs.deps.json
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\bin\Debug\netcoreapp2.0\Graphs.runtimeconfig.json
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\bin\Debug\netcoreapp2.0\Graphs.runtimeconfig.dev.json
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\bin\Debug\netcoreapp2.0\Graphs.dll
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\bin\Debug\netcoreapp2.0\Graphs.pdb
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\obj\Debug\netcoreapp2.0\Graphs.csprojResolveAssemblyReference.cache
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\obj\Debug\netcoreapp2.0\Graphs.csproj.CoreCompileInputs.cache
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\obj\Debug\netcoreapp2.0\Graphs.AssemblyInfoInputs.cache
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\obj\Debug\netcoreapp2.0\Graphs.AssemblyInfo.cs
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\obj\Debug\netcoreapp2.0\Graphs.dll
+C:\Users\RyanAlameddine\Documents\GitHub\DataStructures\Graphs\Graphs\obj\Debug\netcoreapp2.0\Graphs.pdb
