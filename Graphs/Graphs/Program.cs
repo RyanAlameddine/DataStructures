@@ -7,18 +7,15 @@ namespace Graphs
     {
         static void Main(string[] args)
         {
-            UndirectedUnweightedGraph graph = new UndirectedUnweightedGraph(new Dictionary<string, string[]>(){
-                ["0"] = new[] { "3", "4" },
-                ["1"] = new[] { "3", "5" },
-                ["2"] = new[] { "4" },
-                ["3"] = new[] { "0", "1" },
-                ["4"] = new[] { "0", "2", "7" },
-                ["5"] = new[] { "1", "6", "7" },
-                ["6"] = new[] { "5", "7" },
-                ["7"] = new[] { "4", "5", "6" },
+            Graph graph = new Graph(new Dictionary<string, (string, float)[]>()
+            {
+                ["a"] = new[] { ("b", 2f) },
+                ["b"] = new(string, float)[] { },
+                ["c"] = new[] { ("a", 6f), ("f", 3f) },
+                ["d"] = new[] { ("e", 5f) },
+                ["e"] = new(string, float)[] { },
+                ["f"] = new[] { ("d", 7f), ("e", 14f) },
             });
-
-            graph.BreadthFirstTraversal(graph.GetVertex("0"));
 
             
 

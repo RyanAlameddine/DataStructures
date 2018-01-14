@@ -6,20 +6,22 @@ namespace Graphs
 {
     public class Vertex
     {
-        public List<Vertex> connections;
+        public List<Edge> connections;
         public string name;
 
         public Vertex(string name)
         {
             this.name = name;
-            connections = new List<Vertex>();
+            connections = new List<Edge>();
         }
 
-        public void Connect(Vertex target)
+        public void Connect(Vertex target, float weight)
         {
-            if (connections.Contains(target)) return;
-            connections.Add(target);
-            target.connections.Add(this);
+            foreach(Edge connection in connections)
+            {
+                if (connection.end == target) return;
+            }
+            connections.Add(new Edge(this, target, weight));
         }
 
         public override string ToString()
@@ -27,9 +29,12 @@ namespace Graphs
             StringBuilder builder = new StringBuilder();
             foreach(var item in connections)
             {
-                builder.AppendLine(item.name);
+                builder.Append(item.end.name);
+                builder.Append(":");
+                builder.Append(item.weight.ToString());
+                builder.Append(", ");
             }
-           
+            builder.Remove(builder.Length - 2, 2);
             return $"Vertex {name}: {{{builder.ToString()}}}";
         }
     }

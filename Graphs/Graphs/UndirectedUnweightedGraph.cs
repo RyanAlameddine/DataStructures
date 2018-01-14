@@ -6,20 +6,20 @@ namespace Graphs
 {
     public class UndirectedUnweightedGraph
     {
-        public List<Vertex> verticies = new List<Vertex>();
+        public List<UndirectedUnweightedVertex> verticies = new List<UndirectedUnweightedVertex>();
 
-        private List<Vertex> visitedVerticies;
+        private List<UndirectedUnweightedVertex> visitedVerticies;
 
         public UndirectedUnweightedGraph(Dictionary<string, string[]> verticies)
         {
             foreach(string key in verticies.Keys)
             {
-                this.verticies.Add(new Vertex(key));
+                this.verticies.Add(new UndirectedUnweightedVertex(key));
             }
             foreach (string key in verticies.Keys)
             {
-                Vertex vertex = null;
-                foreach(Vertex v in this.verticies)
+                UndirectedUnweightedVertex vertex = null;
+                foreach(UndirectedUnweightedVertex v in this.verticies)
                 {
                     if(v.name == key)
                     {
@@ -29,8 +29,8 @@ namespace Graphs
                 }
                 foreach(string target in verticies[key])
                 {
-                    Vertex targetVertex = null;
-                    foreach(Vertex v in this.verticies)
+                    UndirectedUnweightedVertex targetVertex = null;
+                    foreach(UndirectedUnweightedVertex v in this.verticies)
                     {
                         if(v.name == target)
                         {
@@ -43,55 +43,56 @@ namespace Graphs
             }
         }
 
-        public void AddVertex(Vertex vertex)
+        public void AddVertex(UndirectedUnweightedVertex vertex)
         {
             verticies.Add(vertex);
         }
 
-        public void RemoveVertex(Vertex vertex)
+        public void RemoveVertex(UndirectedUnweightedVertex vertex)
         {
             verticies.Remove(vertex);
-            foreach(Vertex connection in vertex.connections)
+            foreach(UndirectedUnweightedVertex connection in vertex.connections)
             {
                 connection.connections.Remove(vertex);
             }
         }
 
-        public bool HasVertex(Vertex vertex)
+        public bool HasVertex(UndirectedUnweightedVertex vertex)
         {
             return verticies.Contains(vertex);
         }
 
-        public void DepthFirstTraversal(Vertex root)
+        public void DepthFirstTraversal(UndirectedUnweightedVertex root)
         {
-            visitedVerticies = new List<Vertex>();
+            visitedVerticies = new List<UndirectedUnweightedVertex>();
             dFS(root);
-            visitedVerticies = new List<Vertex>();
+            visitedVerticies = new List<UndirectedUnweightedVertex>();
         }
 
-        private void dFS(Vertex current)
+        private void dFS(UndirectedUnweightedVertex current)
         {
+            Console.WriteLine(current.name);
             visitedVerticies.Add(current);
-            foreach(Vertex connection in current.connections)
+            foreach(UndirectedUnweightedVertex connection in current.connections)
             {
                 if (visitedVerticies.Contains(connection)) continue;
                 dFS(connection);
             }
         }
 
-        public void BreadthFirstTraversal(Vertex root)
+        public void BreadthFirstTraversal(UndirectedUnweightedVertex root)
         {
-            visitedVerticies = new List<Vertex>();
-            Queue<Vertex> current = new Queue<Vertex>();
+            visitedVerticies = new List<UndirectedUnweightedVertex>();
+            Queue<UndirectedUnweightedVertex> current = new Queue<UndirectedUnweightedVertex>();
             current.Enqueue(root);
             Console.WriteLine(current.Peek().name);
 
             while(current.Count > 0)
             {
-                Vertex deQueued = current.Dequeue();
+                UndirectedUnweightedVertex deQueued = current.Dequeue();
                 visitedVerticies.Add(deQueued);
 
-                foreach(Vertex connection in deQueued.connections)
+                foreach(UndirectedUnweightedVertex connection in deQueued.connections)
                 {
                     if (visitedVerticies.Contains(connection)) continue;
                     visitedVerticies.Add(connection);
@@ -100,12 +101,12 @@ namespace Graphs
                 }
             }
 
-            visitedVerticies = new List<Vertex>();
+            visitedVerticies = new List<UndirectedUnweightedVertex>();
         }
 
-        public Vertex GetVertex(string name)
+        public UndirectedUnweightedVertex GetVertex(string name)
         {
-            foreach(Vertex vertex in verticies)
+            foreach(UndirectedUnweightedVertex vertex in verticies)
             {
                 if(vertex.name == name)
                 {
