@@ -10,6 +10,11 @@ namespace Graphs
 
         //private List<Vertex> visitedVerticies;
 
+        public Graph(List<Vertex> verticies)
+        {
+            this.verticies = verticies;
+        }
+
         public Graph(Dictionary<string, (string, float)[]> verticies)
         {
             foreach(string key in verticies.Keys)
@@ -122,14 +127,135 @@ namespace Graphs
             throw new NullReferenceException("Vertex not found");
         }
 
-        public void Dijkstra(Vertex start)
+        public string Dijkstra(Vertex start, Vertex end)
         {
-            Dictionary<Vertex, float> costs = new Dictionary<Vertex, float>();
+            Dictionary<Vertex, (float, Vertex)> costs = new Dictionary<Vertex, (float, Vertex)>();
 
-            costs.Add(start, 0);
+            costs.Add(start, (0, null));
 
             List<Edge> currentConnections = new List<Edge>();
-            foreach()
+
+            currentConnections.AddRange(start.connections);
+
+            while (currentConnections.Count > 0)
+            {
+                Edge lowestEdge = new Edge(null, null, float.MaxValue);
+                float lowestCost = float.MaxValue;
+
+                foreach (Edge connection in currentConnections)
+                {
+                    float cost = connection.weight + costs[connection.start].Item1;
+                    if (cost < lowestCost)
+                    {
+                        if (costs.ContainsKey(connection.end))
+                        {
+                            if (costs[connection.end].Item1 < cost)
+                            {
+                                currentConnections.Remove(connection);
+                                continue;
+                            }
+                        }
+                        lowestEdge = connection;
+                        lowestCost = cost;
+                    }
+                }
+
+                currentConnections.Remove(lowestEdge);
+                costs.Add(lowestEdge.end, (lowestCost, lowestEdge.start));
+                currentConnections.AddRange(lowestEdge.end.connections);
+
+                if (lowestEdge.end.name == end.name)
+                {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.Append("{ ");
+                    Vertex current = lowestEdge.end;
+
+                    while (current != null)
+                    {
+                        stringBuilder.Append(current.name);
+                        stringBuilder.Append(", ");
+                        current = costs[current].Item2;
+                    }
+
+                    stringBuilder.Remove(stringBuilder.Length - 2, 2);
+                    stringBuilder.Append(" }");
+
+                    return stringBuilder.ToString();
+                }
+            }
+            return "";
+        }
+
+        public string AStar(Vertex start, Vertex end, Func<Vertex, Vertex, float> heuristic)
+        {
+            Dictionary<Vertex, (float, Vertex)> costs = new Dictionary<Vertex, (float, Vertex)>();
+
+            costs.Add(start, (0, null));
+
+            List<Edge> currentConnections = new List<Edge>();
+
+            currentConnections.AddRange(start.connections);
+
+            while (currentConnections.Count > 0)
+            {
+                Edge lowestEdge = new Edge(null, null, float.MaxValue);
+                float lowestCost = float.MaxValue;
+
+                foreach(Edge connection in currentConnections)
+                {
+                    float cost = connection.weight + costs[connection.start].Item1 + heuristic(connection.end, end);
+                    if(cost < lowestCost)
+                    {
+                        if(costs.ContainsKey(connection.end))
+                        {
+                            if(costs[connection.end].Item1 < cost)
+                            {
+                                currentConnections.Remove(connection);
+                                continue;
+                            }
+                        }
+                        lowestEdge = connection;
+                        lowestCost = cost;
+                    }
+                }
+
+                currentConnections.Remove(lowestEdge);
+                costs.Add(lowestEdge.end, (lowestCost, lowestEdge.start));
+                currentConnections.AddRange(lowestEdge.end.connections);
+
+                if(lowestEdge.end.name == end.name)
+                {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.Append("{ ");
+                    Vertex current = lowestEdge.end;
+
+                    while (current != null)
+                    {
+                        stringBuilder.Append(current.name);
+                        stringBuilder.Append(", ");
+                        current = costs[current].Item2;
+                    }
+
+                    stringBuilder.Remove(stringBuilder.Length - 2, 2);
+                    stringBuilder.Append(" }");
+
+                    return stringBuilder.ToString();
+                }
+            }
+            return "";
+        }
+
+        public float ManhattanDistance(Vertex start, Vertex target)
+        {
+            if (start is PositionedVertex pStart)
+            {
+                if (target is PositionedVertex pTarget)
+                {
+                    float distance = MathF.Abs(pTarget.position.x - pStart.position.x) + MathF.Abs(pTarget.position.y - pStart.position.y);
+                    return distance;
+                }
+            }
+            throw new Exception("Vertex supplied does not contain a position");
         }
     }
 }
